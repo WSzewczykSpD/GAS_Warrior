@@ -8,6 +8,7 @@
 #include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Component/Combat/HeroCombatComponent.h"
 #include "Component/Input/WarriorInputComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "DataAsset/Input/DataAsset_InputConfig.h"
@@ -38,7 +39,7 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	
-	
+	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
 }
 
 void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
