@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "WarriorGameplayAbility.generated.h"
 
+class UPawnCombatComponent;
 /**
  * 
  */
@@ -28,6 +29,8 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "WarriorAbility")
 	EWarriorAbilityActivationPolicy AbilityActivationPolicy = EWarriorAbilityActivationPolicy::OnTriggered;
-	
+
+	UFUNCTION(BlueprintPure, Category = "Warr")
+	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
 	
 };
