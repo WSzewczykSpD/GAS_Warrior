@@ -5,6 +5,7 @@
 
 #include "WarriorStructTypes.generated.h"
 
+class UWarriorEnemyGameplayAbility;
 class UWarriorHeroGameplayAbility;
 class UInputMappingContext;
 class UWarriorHeroLinkedAnimLayer;
@@ -22,6 +23,7 @@ struct FWarriorHeroAbilitySet
 
 	bool IsValid() const;
 };
+
 
 USTRUCT(BlueprintType)
 struct FWarriorHeroWeaponData
