@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "DataAsset_StartupDataBase.generated.h"
 
+class UGameplayEffect;
 class UWarriorGameplayAbility;
 class UWarriorAbilitySystemComponent;
 /**
@@ -26,6 +27,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "StartupData")
 	TArray<TSubclassOf<UWarriorGameplayAbility>> ReactiveAbilities;
+
+	UPROPERTY(EditDefaultsOnly, Category = "StartupData")
+	TArray<TSubclassOf<UGameplayEffect>> StartupGameplayEffects;
 
 	void GrantAbilities(const TArray<TSubclassOf<UWarriorGameplayAbility>>& InAbilitiesToGive, UWarriorAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1);
 };

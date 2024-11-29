@@ -5,6 +5,8 @@
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "AbilitySystem/Ability/WarriorGameplayAbility.h"
+#include "GameplayEffect.h"
+//#include "AbilitySystem/Ability/WarriorGameplayEffect.h"
 
 void UDataAsset_StartupDataBase::GiveToAbilitySystemComponent(UWarriorAbilitySystemComponent* InASCToGive,
                                                               int32 ApplyLevel)
@@ -12,6 +14,16 @@ void UDataAsset_StartupDataBase::GiveToAbilitySystemComponent(UWarriorAbilitySys
 	check(InASCToGive);
 	GrantAbilities(ActivateOnGivenAbilities, InASCToGive, ApplyLevel);
 	GrantAbilities(ReactiveAbilities, InASCToGive, ApplyLevel);
+
+	if(!StartupGameplayEffects.IsEmpty())
+	{
+		for (const TSubclassOf<UGameplayEffect>& EffectClass: StartupGameplayEffects)
+		{
+			if(!EffectClass) continue;
+			UGameplayEffect* EffectCDO = EffectClass->GetDefaultObject<UGameplayEffect>();
+			InASCToGive->ApplyGameplayEffectToSelf(EffectCDO,ApplyLevel,InASCToGive->MakeEffectContext());
+		}
+	};
 }
 
 void UDataAsset_StartupDataBase::GrantAbilities(const TArray<TSubclassOf<UWarriorGameplayAbility>>&  InAbilitiesToGive,
