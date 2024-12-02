@@ -22,6 +22,9 @@ class WARRIOR_API AWarriorHeroCharacter : public AWarriorBaseCharacter
 
 public:
 	AWarriorHeroCharacter();
+	//~ Begin PawnCombat Interface.
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
+	//~ End PawnCombat Interface.
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -58,4 +61,5 @@ private:
 
 public:
 	FORCEINLINE UHeroCombatComponent* GetCombatComponent() const {return HeroCombatComponent;}
+	
 };
