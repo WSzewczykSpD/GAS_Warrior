@@ -25,6 +25,7 @@ public:
 	
 	//~ Begin PawnUI Interface.
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
 	//~ End PawnUI Interface.
 	
 protected:

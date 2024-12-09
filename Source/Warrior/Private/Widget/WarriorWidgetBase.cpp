@@ -2,7 +2,8 @@
 
 
 #include "Widget/WarriorWidgetBase.h"
-
+#include "Component/UI/EnemyUIComponent.h"
+#include "Component/UI/HeroUIComponent.h"
 #include "Interface/PawnUIInterface.h"
 
 void UWarriorWidgetBase::NativeOnInitialized()
@@ -15,5 +16,16 @@ void UWarriorWidgetBase::NativeOnInitialized()
 		{
 			BP_OnOwningHeroUIComponentInitialized(HeroUIComponent);
 		}
+	}
+}
+
+void UWarriorWidgetBase::InitEnemyCreatedWidget(AActor* OwningEnemyActor)
+{
+	if(IPawnUIInterface* PawnUIInterface = Cast<IPawnUIInterface>(OwningEnemyActor))
+	{
+		UEnemyUIComponent* EnemyUIComponent = PawnUIInterface->GetEnemyUIComponent();
+		checkf(EnemyUIComponent, TEXT("Failed to extract an EnemyUIComponent from %s"),*OwningEnemyActor->GetActorNameOrLabel());
+
+		BP_OnOwningEnemyUIComponentInitialized(EnemyUIComponent);
 	}
 }
