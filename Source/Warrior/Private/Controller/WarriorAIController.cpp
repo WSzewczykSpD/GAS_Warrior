@@ -3,6 +3,8 @@
 
 #include "Controller/WarriorAIController.h"
 
+#include "AsyncTreeDifferences.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Debug/WarriorDebugHelper.h"
 #include "Navigation/CrowdFollowingComponent.h"
 #include "Perception/AIPerceptionComponent.h"
@@ -11,10 +13,6 @@
 AWarriorAIController::AWarriorAIController(const FObjectInitializer& ObjectInitializer):
 Super(ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>("PathFollowingComponent"))
 {
-	if(UCrowdFollowingComponent* CrowdComp = Cast<UCrowdFollowingComponent>(GetPathFollowingComponent()))
-	{
-		Debug::Print(TEXT("CrowdFollowingComponent is valid"), FColor::Green);
-	}
 	AISenseConfig_Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("EnemySenseConfig_Sight");
 	AISenseConfig_Sight->DetectionByAffiliation.bDetectEnemies = true;
 	AISenseConfig_Sight->DetectionByAffiliation.bDetectFriendlies = false;
@@ -31,6 +29,27 @@ Super(ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>("Path
 	AAIController::SetGenericTeamId(FGenericTeamId(1));
 }
 
+void AWarriorAIController::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	if(UCrowdFollowingComponent* CrowdComp = Cast<UCrowdFollowingComponent>(GetPathFollowingComponent()))
+	{
+		CrowdComp->SetCrowdSimulationState(bEnableDetourRouteAvoidance ? ECrowdSimulationState::Enabled : ECrowdSimulationState::Disabled);
+		switch(DetourCrowdAvoidanceQuality)
+		{
+		case 1:	CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Low);	break;
+		case 2:	CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Medium);break;
+		case 3:	CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Good);	break;
+		case 4:	CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::High);	break;
+		default:	break;
+		}
+		CrowdComp->SetAvoidanceGroup(1);
+		CrowdComp->SetGroupsToAvoid(1);
+		CrowdComp->SetCrowdCollisionQueryRange(CollisionQueryRange);
+	}
+}
+
 ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	//return Super::GetTeamAttitudeTowards(Other);
@@ -44,10 +63,14 @@ ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& O
 	return ETeamAttitude::Friendly;
 }
 
+
 void AWarriorAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
 	if(Actor && Stimulus.WasSuccessfullySensed())
 	{
-		Debug::Print(Actor->GetActorNameOrLabel() + TEXT("was sensed"), FColor::Green);
+		if(UBlackboardComponent* BBComponent =  GetBlackboardComponent())
+		{
+			BBComponent->SetValueAsObject(FName("TargetActor"),Actor);
+		}
 	}
 }
