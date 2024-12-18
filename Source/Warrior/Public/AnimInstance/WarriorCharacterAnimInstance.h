@@ -23,6 +23,7 @@ public:
 protected:
 	//UPROPERTY()
 	TObjectPtr<AWarriorBaseCharacter> OwningCharacter;
+	
 	TObjectPtr<UCharacterMovementComponent> OwningMovementComponent;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
@@ -30,6 +31,8 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool bHasAcceleration;
-	
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	float LocomotionDirection;
 	
 };

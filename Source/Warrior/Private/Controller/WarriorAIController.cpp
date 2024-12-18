@@ -56,7 +56,7 @@ ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& O
 	const APawn* PawnToCheck = Cast<const APawn>(&Other);
 
 	const IGenericTeamAgentInterface* OtherTeamAgent =  Cast<const IGenericTeamAgentInterface>(PawnToCheck->GetController());
-	if(OtherTeamAgent && OtherTeamAgent->GetGenericTeamId() != GetGenericTeamId())
+	if(OtherTeamAgent && OtherTeamAgent->GetGenericTeamId() < GetGenericTeamId())
 	{
 		return ETeamAttitude::Hostile;
 	}
@@ -66,11 +66,15 @@ ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& O
 
 void AWarriorAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	if(Actor && Stimulus.WasSuccessfullySensed())
+	if(UBlackboardComponent* BBComponent =  GetBlackboardComponent())
 	{
-		if(UBlackboardComponent* BBComponent =  GetBlackboardComponent())
+		if(!BBComponent->GetValueAsObject(FName("TargetActor")))
 		{
-			BBComponent->SetValueAsObject(FName("TargetActor"),Actor);
+			if(Actor && Stimulus.WasSuccessfullySensed())
+			{
+				BBComponent->SetValueAsObject(FName("TargetActor"),Actor);
+			}
 		}
 	}
+	
 }
