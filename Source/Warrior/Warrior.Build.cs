@@ -18,7 +18,8 @@ public class Warrior : ModuleRules
 			"EnhancedInput",
 			"GameplayTasks", 
 			"GameplayAbilities",
-			"AnimGraphRuntime"
+			"AnimGraphRuntime",
+			"MotionWarping"
 			//"AIModule"
 		});
 
