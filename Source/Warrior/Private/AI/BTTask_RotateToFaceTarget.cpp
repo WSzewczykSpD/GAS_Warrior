@@ -97,7 +97,8 @@ bool UBTTask_RotateToFaceTarget::HasReachedAnglePrecision(APawn* QueryPawn, AAct
 	const FVector OwnerToTargetNormalized = (TargetActor->GetActorLocation() - QueryPawn->GetActorLocation()).GetSafeNormal();
 
 	const float DotResult =  FVector::DotProduct(OwnerForward,OwnerToTargetNormalized);
-	const float AngleDiff = UKismetMathLibrary::DegCos(DotResult);
+	const float AngleDiff = UKismetMathLibrary::DegAcos(DotResult);//DegCos(DotResult);
+	UE_LOG(LogTemp,Warning,TEXT("AngleDiff: %f, DotResult: %f,"), AngleDiff, DotResult);
 
 	return AngleDiff <= AnglePrecision;
 }
