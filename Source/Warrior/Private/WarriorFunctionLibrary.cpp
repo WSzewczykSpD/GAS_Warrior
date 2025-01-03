@@ -8,6 +8,7 @@
 #include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "AbilitySystem/Ability/WarriorGameplayAbility.h"
+#include "Debug/WarriorDebugHelper.h"
 #include "Interface/PawnCombatInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -29,7 +30,7 @@ void UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, const
 	}
 }
 
-void UWarriorFunctionLibrary::RemoveGameplayTagToActorIfFound(AActor* InActor, const FGameplayTag TagToRemove)
+void UWarriorFunctionLibrary::RemoveGameplayTagFromActorIfFound(AActor* InActor, const FGameplayTag TagToRemove)
 {
 	UWarriorAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
 	if(ASC->HasMatchingGameplayTag(TagToRemove))
@@ -124,4 +125,20 @@ FGameplayTag UWarriorFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAtta
 	}
 	
 	return WarriorGameplayTags::Shared_Status_HitReact_Front;
+}
+
+bool UWarriorFunctionLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefender)
+{
+	check(InAttacker && InDefender);
+
+	const float DotResult = FVector::DotProduct(InAttacker->GetActorForwardVector(),InDefender->GetActorForwardVector());
+
+	bool BlockValid = DotResult < -0.1f;
+
+	/*
+	const FString DebugString = FString::Printf(TEXT("Dot Result: %f %s"), DotResult, BlockValid ? TEXT("Valid block"):TEXT("Invalid block"));
+	Debug::Print(DebugString, BlockValid ? FColor::Green : FColor::Red);
+	*/
+	
+	return BlockValid;
 }

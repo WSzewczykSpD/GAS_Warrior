@@ -4,6 +4,7 @@
 #include "Component/Combat/EnemyCombatComponent.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "WarriorFunctionLibrary.h"
 #include "WarriorGameplayTags.h"
 #include "Debug/WarriorDebugHelper.h"
 
@@ -17,10 +18,17 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	OverlappedActors.AddUnique(HitActor);
 
 	//TODO implement block check
-	bool bISValidBlock = false;
-	
-	const bool bIsPlayerBlocking = false;
+	const bool bIsPlayerBlocking = UWarriorFunctionLibrary::NativeDoesActorHaveTag(HitActor, WarriorGameplayTags::Player_Status_Blocking);
 	const bool bIsMyAttackUnblockable = false;
+	bool bIsValidBlock = false;
+
+	if(bIsPlayerBlocking && !bIsMyAttackUnblockable)
+	{
+		bIsValidBlock = UWarriorFunctionLibrary::IsValidBlock(GetOwningPawn(),HitActor);	
+	}
+
+	
+	
 
 	if(bIsPlayerBlocking && bIsMyAttackUnblockable)
 	{
@@ -31,9 +39,12 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	EventData.Instigator = GetOwningPawn();
 	EventData.Target = HitActor;
 
-	if(bISValidBlock)
+	if(bIsValidBlock)
 	{
-		//TODO: Handle succesfull block
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			HitActor,
+			WarriorGameplayTags::Player_Event_SuccessfulBlock,
+			EventData);
 	}else
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
