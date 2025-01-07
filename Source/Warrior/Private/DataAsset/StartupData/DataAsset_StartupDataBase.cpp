@@ -6,7 +6,6 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "AbilitySystem/Ability/WarriorGameplayAbility.h"
 #include "GameplayEffect.h"
-//#include "AbilitySystem/Ability/WarriorGameplayEffect.h"
 
 void UDataAsset_StartupDataBase::GiveToAbilitySystemComponent(UWarriorAbilitySystemComponent* InASCToGive,
                                                               int32 ApplyLevel)
