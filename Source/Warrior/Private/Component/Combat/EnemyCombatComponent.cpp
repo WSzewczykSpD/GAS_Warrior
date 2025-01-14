@@ -19,7 +19,7 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 
 	//TODO implement block check
 	const bool bIsPlayerBlocking = UWarriorFunctionLibrary::NativeDoesActorHaveTag(HitActor, WarriorGameplayTags::Player_Status_Blocking);
-	const bool bIsMyAttackUnblockable = false;
+	const bool bIsMyAttackUnblockable = UWarriorFunctionLibrary::NativeDoesActorHaveTag(GetOwner(), WarriorGameplayTags::Enemy_Status_Unblockable);
 	bool bIsValidBlock = false;
 
 	if(bIsPlayerBlocking && !bIsMyAttackUnblockable)
