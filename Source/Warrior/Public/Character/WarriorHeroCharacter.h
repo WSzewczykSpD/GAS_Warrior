@@ -39,6 +39,20 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	//~ End APawn Interface.
 
+	
+#if WITH_EDITOR
+	//~ Begin UObject Interface.
+	virtual void PostEditChangeProperty( struct FPropertyChangedEvent& PropertyChangedEvent) override;
+	//~ End UObject Interface.
+#endif
+
+	UFUNCTION(BlueprintCallable, Category = "Camera")
+	void SwitchCameraView(bool EnableStandardView);
+	//TODO: Create SetEnabledCameraOnStartup func and ToggleCameraView
+	
+	UPROPERTY(EditAnywhere, Category = "Camera")
+	bool bAlternativeCamera = false;
+
 private:
 #pragma region Components
 
@@ -46,6 +60,10 @@ private:
 	USpringArmComponent* CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* AltCameraBoom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* AltFollowCamera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	UHeroCombatComponent* HeroCombatComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))

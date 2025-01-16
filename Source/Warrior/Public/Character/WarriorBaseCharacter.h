@@ -21,7 +21,6 @@ class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySyst
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AWarriorBaseCharacter();
 
 protected:

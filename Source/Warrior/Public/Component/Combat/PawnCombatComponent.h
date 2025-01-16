@@ -42,6 +42,9 @@ public:
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
 
 protected:
+	virtual void ToggleEquippedWeaponCollision(bool bShouldEnable);
+	virtual void ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType);
+	
 	TArray<AActor*> OverlappedActors;
 	
 private:

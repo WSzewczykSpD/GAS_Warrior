@@ -18,7 +18,6 @@
 #include "Debug/WarriorDebugHelper.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "ProfilingDebugging/ScopedTimers.h"
 
 AWarriorHeroCharacter::AWarriorHeroCharacter()
 {
@@ -33,10 +32,18 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	CameraBoom->SocketOffset = FVector(0.f,55.f,65.f);
 	CameraBoom->bUsePawnControlRotation = true;
 
+	AltCameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("AltCameraBoom"));
+	AltCameraBoom->SetupAttachment(GetRootComponent());
+	
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom,USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	AltFollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("AltFollowCamera"));
+	AltFollowCamera->SetupAttachment(AltCameraBoom,USpringArmComponent::SocketName);
+
+	SwitchCameraView(!bAlternativeCamera);
+	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
@@ -106,12 +113,36 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 	
 }
 
+#if WITH_EDITOR
+void AWarriorHeroCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	
+	if(PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass,bAlternativeCamera))
+	{
+		SwitchCameraView(bAlternativeCamera);
+	}
+}
+#endif
+
+void AWarriorHeroCharacter::SwitchCameraView(bool EnableStandardView)
+{
+	FollowCamera->SetAutoActivate(!bAlternativeCamera);
+	AltFollowCamera->SetAutoActivate(bAlternativeCamera);
+}
+
 void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
-	const FRotator MovementRotation(0.f, Controller->GetControlRotation().Yaw,0.f);
+	const FRotator MovementRotation(
+		0.f,
+		bAlternativeCamera?AltFollowCamera->GetComponentRotation().Yaw
+		:
+		Controller->GetControlRotation().Yaw,
+		0.f);
+	
 
-	if(MovementVector.Y!=0.f)
+	if(MovementVector.Y != 0.f)
 	{
 		const FVector ForwardDirection = MovementRotation.RotateVector(FVector::ForwardVector);
 		AddMovementInput(ForwardDirection,MovementVector.Y);

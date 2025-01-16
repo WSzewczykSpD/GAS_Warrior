@@ -6,6 +6,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "WarriorFunctionLibrary.h"
 #include "WarriorGameplayTags.h"
+#include "Character/WarriorEnemyCharacter.h"
+#include "Components/BoxComponent.h"
 #include "Debug/WarriorDebugHelper.h"
 
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
@@ -52,4 +54,32 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 			WarriorGameplayTags::Shared_Event_MeleeHit,
 			EventData);
 	}
+}
+
+void UEnemyCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	AWarriorEnemyCharacter* OwningEnemyCharacter = GetOwningPawn<AWarriorEnemyCharacter>();
+
+	check(OwningEnemyCharacter);
+
+	UBoxComponent* LeftHandCollisionBox = OwningEnemyCharacter->GetLeftHandCollisionBox();
+	UBoxComponent* RightHandCollisionBox = OwningEnemyCharacter->GetRightHandCollisionBox();
+
+	check(LeftHandCollisionBox && RightHandCollisionBox);
+
+	switch(ToggleDamageType) {
+	case EToggleDamageType::LeftHand:
+		LeftHandCollisionBox->SetCollisionEnabled(bShouldEnable ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+	case EToggleDamageType::RightHand:
+		RightHandCollisionBox->SetCollisionEnabled(bShouldEnable ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+	default:
+		break;
+	}
+	if(bShouldEnable == false)
+	{
+		OverlappedActors.Empty();
+	}
+
 }
