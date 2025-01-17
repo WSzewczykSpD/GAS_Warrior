@@ -20,7 +20,8 @@ public class Warrior : ModuleRules
 			"GameplayAbilities",
 			"AnimGraphRuntime",
 			"MotionWarping",
-			"Niagara"
+			"Niagara",
+			"NavigationSystem"
 			//"AIModule"
 		});
 

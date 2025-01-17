@@ -42,7 +42,7 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	AltFollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("AltFollowCamera"));
 	AltFollowCamera->SetupAttachment(AltCameraBoom,USpringArmComponent::SocketName);
 
-	SwitchCameraView(!bAlternativeCamera);
+	SetDefaultCameraViewOnStartup(!bAlternativeCamera);
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
@@ -120,15 +120,23 @@ void AWarriorHeroCharacter::PostEditChangeProperty(FPropertyChangedEvent& Proper
 	
 	if(PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass,bAlternativeCamera))
 	{
-		SwitchCameraView(bAlternativeCamera);
+		SetDefaultCameraViewOnStartup(bAlternativeCamera);
 	}
 }
 #endif
 
-void AWarriorHeroCharacter::SwitchCameraView(bool EnableStandardView)
+void AWarriorHeroCharacter::SetDefaultCameraViewOnStartup(bool EnableStandardView)
 {
 	FollowCamera->SetAutoActivate(!bAlternativeCamera);
 	AltFollowCamera->SetAutoActivate(bAlternativeCamera);
+}
+
+void AWarriorHeroCharacter::ToggleCameraView(bool EnableStandardView)
+{
+	
+	FollowCamera->SetActive(EnableStandardView);
+	AltFollowCamera->SetActive(!EnableStandardView);
+	bAlternativeCamera = !EnableStandardView;
 }
 
 void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)

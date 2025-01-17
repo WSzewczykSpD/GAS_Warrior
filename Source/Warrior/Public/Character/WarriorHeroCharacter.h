@@ -47,7 +47,11 @@ protected:
 #endif
 
 	UFUNCTION(BlueprintCallable, Category = "Camera")
-	void SwitchCameraView(bool EnableStandardView);
+	void SetDefaultCameraViewOnStartup(bool EnableStandardView);
+
+	UFUNCTION(BlueprintCallable, Category = "Camera")
+	void ToggleCameraView(bool EnableStandardView);
+	
 	//TODO: Create SetEnabledCameraOnStartup func and ToggleCameraView
 	
 	UPROPERTY(EditAnywhere, Category = "Camera")
