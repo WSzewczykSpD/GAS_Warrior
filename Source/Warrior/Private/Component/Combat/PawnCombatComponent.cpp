@@ -4,8 +4,6 @@
 #include "Component/Combat/PawnCombatComponent.h"
 
 #include "Components/BoxComponent.h"
-#include "Debug/WarriorDebugHelper.h"
-#include "GeometryCollection/GeometryCollectionSimulationTypes.h"
 #include "Item/Weapon/WarriorWeaponBase.h"
 
 void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegister,
