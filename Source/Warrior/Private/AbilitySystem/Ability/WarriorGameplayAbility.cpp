@@ -3,8 +3,10 @@
 
 #include "AbilitySystem/Ability/WarriorGameplayAbility.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "WarriorFunctionLibrary.h"
+#include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Component/Combat/PawnCombatComponent.h"
 
@@ -62,4 +64,41 @@ FActiveGameplayEffectHandle UWarriorGameplayAbility::BP_ApplyGameplayEffectSpecH
 
 	OutSuccessType = ActiveGameplayEffectHandle.WasSuccessfullyApplied() ? EWarriorSuccessType::Successful : EWarriorSuccessType::Failed;
 	return ActiveGameplayEffectHandle;
+}
+
+void UWarriorGameplayAbility::ApplyGameplayEffectSpecHandleToHitResult(const FGameplayEffectSpecHandle& InSpecHandle,
+	const TArray<FHitResult>& InHitResults)
+{
+	if(InHitResults.IsEmpty())
+	{
+		return;
+	}
+
+	APawn* OwningPawn = Cast<APawn>(GetOwningActorFromActorInfo());
+	
+	for(const FHitResult& Hit : InHitResults)
+	{
+		if(APawn* HitPawn = Cast<APawn>(Hit.GetActor()))
+		{
+			if(UWarriorFunctionLibrary::IsTargetPawnHostile(OwningPawn,HitPawn))
+			{
+				FActiveGameplayEffectHandle ActiveGameplayEffectHandle = NativeApplyGameplayEffectSpecHandleToTarget(HitPawn,InSpecHandle);
+
+				if(ActiveGameplayEffectHandle.WasSuccessfullyApplied())
+				{
+					FGameplayEventData Data;
+					Data.Instigator = OwningPawn;
+					Data.Target = HitPawn;
+					
+					UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+						HitPawn,
+						WarriorGameplayTags::Shared_Event_HitReact,
+						Data
+						);
+				}
+			}
+		}
+		
+	}
+
 }
