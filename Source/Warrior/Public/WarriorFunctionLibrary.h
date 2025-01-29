@@ -54,5 +54,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
 	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (Latent, WorldContext = "WorldContextObject", LatentInfo = "LatentActionInfo", ExpandEnumAsExecs = "CountDownActionInput|CountDownOutput", TotalTime = "1.0", UpdateInterval = "0.1"))
+	static void CountDown(const UObject* WorldContextObject, float TotalTime,
+		float UpdateInterval, float& OutRemainingTime,
+		EWarriorCountDownActionInput CountDownActionInput,
+		UPARAM(DisplayName = "Output") EWarriorCountDownActionOutput& CountDownOutput,
+		FLatentActionInfo LatentActionInfo);
 	
 };
