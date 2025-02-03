@@ -4,7 +4,8 @@
 #include "DataAsset/StartupData/DataAsset_HeroStartupData.h"
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
-#include "AbilitySystem/Ability/WarriorGameplayAbility.h"
+//#include "AbilitySystem/Ability/WarriorGameplayAbility.h"
+#include "AbilitySystem/Ability/WarriorHeroGameplayAbility.h"
 #include "WarriorTypes/WarriorStructTypes.h"
 
 
