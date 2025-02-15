@@ -61,6 +61,7 @@ class WARRIOR_API AWarriorSurvivalGameMode : public AWarriorGameModeBase
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
 private:
 
