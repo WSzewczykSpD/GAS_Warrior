@@ -7,6 +7,7 @@
 #include "Component/PawnExtensionComponentBase.h"
 #include "PawnCombatComponent.generated.h"
 
+class UBoxComponent;
 class AWarriorWeaponBase;
 
 UENUM(BlueprintType)
@@ -14,7 +15,8 @@ enum class EToggleDamageType : uint8
 {
 	CurrentEquippedWeapon,
 	LeftHand,
-	RightHand
+	RightHand,
+	RightFoot
 };
 
 UCLASS()
@@ -25,6 +27,8 @@ class WARRIOR_API UPawnCombatComponent : public UPawnExtensionComponentBase
 public:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	void RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegister, AWarriorWeaponBase* WeaponToRegister, bool RegisterAsEquippedWeapon = false);
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	void RegisterLethalBodyPart(FGameplayTag InWeaponTagToRegister, AWarriorWeaponBase* WeaponToRegister);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	AWarriorWeaponBase* GetCharacterCarriedWeaponByTag(FGameplayTag InWeaponTagToGet) const;
@@ -38,18 +42,28 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
 
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	void AddBodyCollisionComponent(EToggleDamageType DamageType, UBoxComponent* BoxComponent)
+		{BodyDamageCollisionComponents.Add(DamageType,BoxComponent);};
+	
 	virtual void OnHitTargetActor(AActor* HitActor);
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
+
+	
 
 protected:
 	virtual void ToggleEquippedWeaponCollision(bool bShouldEnable);
 	virtual void ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType);
 	
+	UPROPERTY(VisibleAnywhere)
+	TMap<EToggleDamageType, UBoxComponent*> BodyDamageCollisionComponents;
+
+	UPROPERTY()
 	TArray<AActor*> OverlappedActors;
+
 	
 private:
 	TMap<FGameplayTag, AWarriorWeaponBase*> CharacterCarriedWeaponMap;
-	
 	
 	
 };

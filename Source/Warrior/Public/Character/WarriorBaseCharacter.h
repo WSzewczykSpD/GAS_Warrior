@@ -15,6 +15,8 @@ class UDataAsset_StartupDataBase;
 class UWarriorAttributeSet;
 class UWarriorAbilitySystemComponent;
 
+DECLARE_DELEGATE_OneParam(FOnTargetInteractedDelegate, AActor*)
+
 UCLASS()
 class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface
 {
@@ -22,6 +24,9 @@ class WARRIOR_API AWarriorBaseCharacter : public ACharacter, public IAbilitySyst
 
 public:
 	AWarriorBaseCharacter();
+
+	FOnTargetInteractedDelegate OnBodyHitTarget;
+	FOnTargetInteractedDelegate OnBodyPulledFromTarget; 
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
@@ -38,8 +43,12 @@ protected:
 	
 	
 public:
+	UFUNCTION(BlueprintImplementableEvent)
+	bool SetupBodyCombatCollisions();
+	
 	FORCEINLINE UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponent() const{return AbilityComponent;}
 	FORCEINLINE UWarriorAttributeSet* GetWarriorAttributeSet() const{return AttributeSet;}
+	
 
 	//~ Begin AbilitySystem Interface.
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

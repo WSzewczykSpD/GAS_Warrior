@@ -6,12 +6,14 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "EnhancedInputSubsystems.h"
+#include "WarriorFunctionLibrary.h"
 #include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Component/Combat/HeroCombatComponent.h"
 #include "Component/Input/WarriorInputComponent.h"
 #include "Component/UI/HeroUIComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "DataAsset/Input/DataAsset_InputConfig.h"
 #include "DataAsset/StartupData/DataAsset_StartupDataBase.h"
@@ -52,6 +54,11 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
+
+	RightFootCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("FootCollisionComponent"));
+	RightFootCollisionBox->SetupAttachment(GetMesh());
+	RightFootCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RightFootCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this,&ThisClass::OnFootCollisionBoxStartOverlap);
 
 	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>(TEXT("UIHeroComponent"));
 }
@@ -150,6 +157,10 @@ void AWarriorHeroCharacter::PostEditChangeProperty(FPropertyChangedEvent& Proper
 	{
 		SetDefaultCameraViewOnStartup(bAlternativeCamera);
 	}
+	if(PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass,RightFootCollisionBoxAttachBoneName))
+	{
+		RightFootCollisionBox->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale,RightFootCollisionBoxAttachBoneName);
+	}
 }
 #endif
 
@@ -165,6 +176,19 @@ void AWarriorHeroCharacter::ToggleCameraView(bool EnableStandardView)
 	FollowCamera->SetActive(EnableStandardView);
 	AltFollowCamera->SetActive(!EnableStandardView);
 	bAlternativeCamera = !EnableStandardView;
+}
+
+void AWarriorHeroCharacter::OnFootCollisionBoxStartOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if(UWarriorFunctionLibrary::IsTargetPawnHostile(this,HitPawn))
+		{
+			HeroCombatComponent->OnHitTargetActor(HitPawn);
+			
+		}
+	}
 }
 
 void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)

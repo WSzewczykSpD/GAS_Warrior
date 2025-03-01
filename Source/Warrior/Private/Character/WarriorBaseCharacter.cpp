@@ -42,6 +42,8 @@ void AWarriorBaseCharacter::PossessedBy(AController* NewController)
 	
 		ensureMsgf(!CharacterStartupData.IsNull(),TEXT("Forgot to assign startup data for character %s"),*GetName());
 	}
+
+	SetupBodyCombatCollisions();
 }
 
 

@@ -5,6 +5,8 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "WarriorGameplayTags.h"
+#include "Character/WarriorHeroCharacter.h"
+#include "Components/BoxComponent.h"
 #include "Debug/WarriorDebugHelper.h"
 #include "Item/Weapon/WarriorHeroWeapon.h"
 
@@ -51,4 +53,27 @@ void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor
 		GetOwningPawn(),WarriorGameplayTags::Player_Event_HitPause,
 		FGameplayEventData());
 	
+}
+
+void UHeroCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	AWarriorHeroCharacter* OwningHeroCharacter = GetOwningPawn<AWarriorHeroCharacter>();
+
+	check(OwningHeroCharacter);
+
+	UBoxComponent* RightFootCollisionBox = OwningHeroCharacter->GetRightFootCollisionBox();
+	
+	check(RightFootCollisionBox);
+
+	switch(ToggleDamageType) {
+	case EToggleDamageType::RightFoot:
+		RightFootCollisionBox->SetCollisionEnabled(bShouldEnable ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+	default:
+		break;
+	}
+	if(bShouldEnable == false)
+	{
+		OverlappedActors.Empty();
+	}
 }

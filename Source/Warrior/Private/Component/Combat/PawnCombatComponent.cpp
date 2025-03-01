@@ -24,6 +24,10 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegis
 	
 }
 
+void UPawnCombatComponent::RegisterLethalBodyPart(FGameplayTag InWeaponTagToRegister, AWarriorWeaponBase* WeaponToRegister)
+{
+}
+
 AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCarriedWeaponByTag(FGameplayTag InWeaponTagToGet) const
 {
 	if(CharacterCarriedWeaponMap.Contains(InWeaponTagToGet))
@@ -84,4 +88,15 @@ void UPawnCombatComponent::ToggleEquippedWeaponCollision(bool bShouldEnable)
 
 void UPawnCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
 {
+	if(UBoxComponent* BodyCollisionBoxToToggle = BodyDamageCollisionComponents.FindOrAdd(EToggleDamageType::RightFoot))
+	{
+		if(bShouldEnable)
+		{
+			BodyCollisionBoxToToggle->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		}else
+		{
+			BodyCollisionBoxToToggle->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			OverlappedActors.Empty();
+		}
+	}
 }

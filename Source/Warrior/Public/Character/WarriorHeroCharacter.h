@@ -16,6 +16,7 @@ class USpringArmComponent;
 /**
  * 
  */
+
 UCLASS()
 class WARRIOR_API AWarriorHeroCharacter : public AWarriorBaseCharacter
 {
@@ -51,11 +52,20 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 	void ToggleCameraView(bool EnableStandardView);
+
+	UFUNCTION()
+	virtual void OnFootCollisionBoxStartOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	
 	//TODO: Create SetEnabledCameraOnStartup func and ToggleCameraView
 	
 	UPROPERTY(EditAnywhere, Category = "Camera")
 	bool bAlternativeCamera = false;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Combat")
+	UBoxComponent* RightFootCollisionBox;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Combat")
+	FName RightFootCollisionBoxAttachBoneName;
 
 private:
 #pragma region Components
@@ -72,7 +82,6 @@ private:
 	UHeroCombatComponent* HeroCombatComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	UHeroUIComponent* HeroUIComponent;
-	
 	
 #pragma endregion
 
@@ -99,5 +108,6 @@ private:
 
 public:
 	FORCEINLINE UHeroCombatComponent* GetCombatComponent() const {return HeroCombatComponent;}
+	FORCEINLINE UBoxComponent* GetRightFootCollisionBox() const {return RightFootCollisionBox;};
 	
 };

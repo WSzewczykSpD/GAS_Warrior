@@ -17,6 +17,7 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_SpecialWeaponAbility_Light,"InputTag.SpecialWeaponAbility.Light")
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_SpecialWeaponAbility_Heavy,"InputTag.SpecialWeaponAbility.Heavy")
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_PickUp_Stone,"InputTag.PickUp.Stone")
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_Kick,"InputTag.Kick")
 	
 
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_MustBeHeld,"InputTag.MustBeHeld")
@@ -41,6 +42,7 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_SpecialWeaponAbility_Light,"Player.Ability.SpecialWeaponAbility.Light")
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_SpecialWeaponAbility_Heavy,"Player.Ability.SpecialWeaponAbility.Heavy")
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_PickUp_Stone,"Player.Ability.PickUp.Stone")
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Kick,"Player.Ability.Kick")
 
 	UE_DEFINE_GAMEPLAY_TAG(Player_Cooldown_SpecialWeaponAbility_Light,"Player.Cooldown.SpecialWeaponAbility.Light")
 	UE_DEFINE_GAMEPLAY_TAG(Player_Cooldown_SpecialWeaponAbility_Heavy,"Player.Cooldown.SpecialWeaponAbility.Heavy")
@@ -105,6 +107,7 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Status_HitReact_Right,"Shared.Status.HitReact.Right")
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Status_HitReact_Back,"Shared.Status.HitReact.Back")
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Status_Invincible,"Shared.Status.Invincible")
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Status_Stunned,"Shared.Status.Stunned")
 	
 	/** Game Data Tags **/
 	UE_DEFINE_GAMEPLAY_TAG(GameData_Level_SurvivalGameModeMap,"GameData.Level.SurvivalGameModeMap")
