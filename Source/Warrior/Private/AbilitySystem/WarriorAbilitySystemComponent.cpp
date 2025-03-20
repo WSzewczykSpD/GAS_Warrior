@@ -7,6 +7,11 @@
 #include "AbilitySystem/Ability/WarriorHeroGameplayAbility.h"
 #include "WarriorTypes/WarriorStructTypes.h"
 
+UWarriorAbilitySystemComponent::UWarriorAbilitySystemComponent()
+{
+	SetIsReplicated(true);
+}
+
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
 {
 	if(!InInputTag.IsValid()) return;

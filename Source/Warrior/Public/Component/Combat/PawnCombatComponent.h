@@ -43,8 +43,7 @@ public:
 	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
-	void AddBodyCollisionComponent(EToggleDamageType DamageType, UBoxComponent* BoxComponent)
-		{BodyDamageCollisionComponents.Add(DamageType,BoxComponent);};
+	void AddBodyCollisionComponent(EToggleDamageType DamageType, UBoxComponent* BoxComponent);
 	
 	virtual void OnHitTargetActor(AActor* HitActor);
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
@@ -59,7 +58,7 @@ protected:
 	TMap<EToggleDamageType, UBoxComponent*> BodyDamageCollisionComponents;
 
 	UPROPERTY()
-	TArray<AActor*> OverlappedActors;
+	TArray<TObjectPtr<AActor>> OverlappedActors;
 
 	
 private:

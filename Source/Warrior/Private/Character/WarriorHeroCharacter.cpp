@@ -186,7 +186,6 @@ void AWarriorHeroCharacter::OnFootCollisionBoxStartOverlap(UPrimitiveComponent* 
 		if(UWarriorFunctionLibrary::IsTargetPawnHostile(this,HitPawn))
 		{
 			HeroCombatComponent->OnHitTargetActor(HitPawn);
-			
 		}
 	}
 }

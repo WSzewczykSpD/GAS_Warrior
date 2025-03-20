@@ -6,6 +6,7 @@
 #include "Character/WarriorBaseCharacter.h"
 #include "WarriorHeroCharacter.generated.h"
 
+class UBoxComponent;
 class UHeroUIComponent;
 struct FGameplayTag;
 class UHeroCombatComponent;
@@ -13,9 +14,7 @@ struct FInputActionValue;
 class UDataAsset_InputConfig;
 class UCameraComponent;
 class USpringArmComponent;
-/**
- * 
- */
+
 
 UCLASS()
 class WARRIOR_API AWarriorHeroCharacter : public AWarriorBaseCharacter
@@ -24,6 +23,7 @@ class WARRIOR_API AWarriorHeroCharacter : public AWarriorBaseCharacter
 
 public:
 	AWarriorHeroCharacter();
+	
 	//~ Begin PawnCombat Interface.
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 	//~ End PawnCombat Interface.
@@ -34,12 +34,9 @@ public:
 	//~ End PawnUI Interface.
 	
 protected:
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;
-	//~ Begin APawn Interface.
 	virtual void PossessedBy(AController* NewController) override;
-	//~ End APawn Interface.
-
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 #if WITH_EDITOR
 	//~ Begin UObject Interface.

@@ -61,6 +61,11 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDama
 	}
 }
 
+void UPawnCombatComponent::AddBodyCollisionComponent(EToggleDamageType DamageType, UBoxComponent* BoxComponent)
+{
+	BodyDamageCollisionComponents.Add(DamageType,BoxComponent);
+}
+
 void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
 }

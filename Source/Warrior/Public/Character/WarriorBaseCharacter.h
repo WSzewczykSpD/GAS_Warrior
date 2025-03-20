@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "Component/Combat/PawnCombatComponent.h"
 #include "GameFramework/Character.h"
 #include "Interface/PawnCombatInterface.h"
 #include "Interface/PawnUIInterface.h"
@@ -43,13 +42,6 @@ protected:
 	
 	
 public:
-	UFUNCTION(BlueprintImplementableEvent)
-	bool SetupBodyCombatCollisions();
-	
-	FORCEINLINE UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponent() const{return AbilityComponent;}
-	FORCEINLINE UWarriorAttributeSet* GetWarriorAttributeSet() const{return AttributeSet;}
-	
-
 	//~ Begin AbilitySystem Interface.
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End AbilitySystem Interface.
@@ -61,6 +53,12 @@ public:
 	//~ Begin PawnUI Interface.
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 	//~ End PawnUI Interface.
+	
+	FORCEINLINE UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponent() const{return AbilityComponent;}
+	FORCEINLINE UWarriorAttributeSet* GetWarriorAttributeSet() const{return AttributeSet;}
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	bool SetupBodyCombatCollisions();
 	
 protected:
 	//~ Begin APawn Interface.
